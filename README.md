@@ -69,9 +69,7 @@ Python ≥3.9; see `requirements.txt`. The analyses were run on a single CPU cor
 - Evaluation: repeated stratified five-fold cross-validation (5 × 5); corrected resampled t-test (Nadeau & Bengio 2003).
 - Genetics: 74 independent genome-wide significant variants (GWAS Catalog, P < 5 × 10⁻⁸; LD r² < 0.1); fold-specific weights; adjustment for 10 genetic PCs.
 
-## Note on AI assistance
 
-Parts of the analysis code were developed with the assistance of a large language model (Claude, Anthropic) under the direction of the authors; all code and results were reviewed and verified by the authors.
 
 ## Licence
 
