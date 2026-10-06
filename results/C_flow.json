@@ -1,0 +1,15 @@
+{
+ "incident_all": 26975,
+ "incident_british": 22254,
+ "controls_prevalent_set": 10473,
+ "controls_never_diagnosed": 9954,
+ "cases_excl_hba1c48": 6441,
+ "controls_excl_hba1c48": 82,
+ "cases_final": 15813,
+ "controls_final": 9872,
+ "median_years_to_dx": 7.493497604380561,
+ "iqr_years": [
+  5.0951403148528405,
+  9.670088980150581
+ ]
+}

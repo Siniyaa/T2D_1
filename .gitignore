@@ -1,0 +1,17 @@
+# Never commit UK Biobank participant-level data
+data/
+*.bed
+*.bim
+*.fam
+*.pgen
+*.pvar
+*.psam
+*.bgen
+*.xpt
+medical_history*.tsv
+T2D_geno.tsv
+pcs.tsv
+grs_variants_genotypes.tsv
+*.pkl
+__pycache__/
+figures/
