@@ -1,0 +1,31 @@
+Sex,Age group,Definition,n,cases,AUROC,SD
+Male,<50,main,1481,394,0.907,0.018
+Male,<50,exclude misclassified controls,1471,394,0.911,0.019
+Male,<50,reclassify as cases,1481,404,0.911,0.017
+Male,50-54,main,1310,592,0.899,0.02
+Male,50-54,exclude misclassified controls,1293,592,0.908,0.019
+Male,50-54,reclassify as cases,1310,609,0.908,0.016
+Male,55-59,main,1877,1033,0.892,0.016
+Male,55-59,exclude misclassified controls,1853,1033,0.9,0.011
+Male,55-59,reclassify as cases,1877,1057,0.901,0.015
+Male,60-64,main,3230,2056,0.872,0.012
+Male,60-64,exclude misclassified controls,3191,2056,0.882,0.01
+Male,60-64,reclassify as cases,3230,2095,0.882,0.013
+Male,>=65,main,3531,2472,0.855,0.014
+Male,>=65,exclude misclassified controls,3497,2472,0.866,0.011
+Male,>=65,reclassify as cases,3531,2506,0.866,0.014
+Female,<50,main,1557,325,0.894,0.021
+Female,<50,exclude misclassified controls,1550,325,0.898,0.02
+Female,<50,reclassify as cases,1557,332,0.903,0.015
+Female,50-54,main,1300,440,0.892,0.016
+Female,50-54,exclude misclassified controls,1290,440,0.892,0.017
+Female,50-54,reclassify as cases,1300,450,0.893,0.021
+Female,55-59,main,1710,635,0.901,0.015
+Female,55-59,exclude misclassified controls,1690,635,0.907,0.015
+Female,55-59,reclassify as cases,1710,655,0.906,0.017
+Female,60-64,main,2551,1153,0.905,0.013
+Female,60-64,exclude misclassified controls,2531,1153,0.912,0.013
+Female,60-64,reclassify as cases,2551,1173,0.91,0.013
+Female,>=65,main,2369,1343,0.878,0.014
+Female,>=65,exclude misclassified controls,2339,1343,0.89,0.014
+Female,>=65,reclassify as cases,2369,1373,0.89,0.012

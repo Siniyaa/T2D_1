@@ -1,0 +1,9 @@
+outcome,sex,probs,prevalence,intercept,slope,Brier
+Diagnosed,Male,raw,0.2042,-2.27,0.72,0.2649
+Diagnosed,Male,prevalence-corrected,0.2042,-0.91,0.72,0.155
+Undiagnosed,Male,raw,0.0765,-3.05,0.36,0.2409
+Undiagnosed,Male,prevalence-corrected,0.0765,-0.56,0.36,0.082
+Diagnosed,Female,raw,0.1682,-2.39,0.77,0.2546
+Diagnosed,Female,prevalence-corrected,0.1682,-0.79,0.77,0.1303
+Undiagnosed,Female,raw,0.0725,-3.37,0.48,0.2714
+Undiagnosed,Female,prevalence-corrected,0.0725,-0.83,0.48,0.0803

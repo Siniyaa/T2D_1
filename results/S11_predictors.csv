@@ -1,0 +1,177 @@
+Predictor (UK Biobank field),Type,"Missing, %"
+Age when attended assessment centre [21003],numeric,0.0
+Waist circumference [48],numeric,0.3
+Hip circumference [49],numeric,0.3
+Standing height [50],numeric,0.4
+Seated height [51],numeric,0.4
+Sitting height [20015],numeric,0.4
+Body mass index (BMI) [21001],numeric,0.7
+Weight [21002],numeric,0.6
+Weight [23098],numeric,3.3
+Body fat percentage [23099],numeric,3.3
+Whole body fat mass [23100],numeric,3.4
+Whole body fat-free mass [23101],numeric,3.3
+Whole body water mass [23102],numeric,3.3
+Body mass index (BMI) [23104],numeric,3.3
+Impedance of whole body [23106],numeric,3.3
+Impedance of leg (right) [23107],numeric,3.3
+Impedance of leg (left) [23108],numeric,3.3
+Impedance of arm (right) [23109],numeric,3.3
+Impedance of arm (left) [23110],numeric,3.3
+Leg fat percentage (right) [23111],numeric,3.3
+Leg fat mass (right) [23112],numeric,3.3
+Leg fat-free mass (right) [23113],numeric,3.3
+Leg predicted mass (right) [23114],numeric,3.3
+Leg fat percentage (left) [23115],numeric,3.3
+Leg fat mass (left) [23116],numeric,3.3
+Leg fat-free mass (left) [23117],numeric,3.3
+Leg predicted mass (left) [23118],numeric,3.3
+Arm fat percentage (right) [23119],numeric,3.3
+Arm fat mass (right) [23120],numeric,3.3
+Arm fat-free mass (right) [23121],numeric,3.3
+Arm predicted mass (right) [23122],numeric,3.3
+Arm fat percentage (left) [23123],numeric,3.3
+Arm fat mass (left) [23124],numeric,3.3
+Arm fat-free mass (left) [23125],numeric,3.3
+Arm predicted mass (left) [23126],numeric,3.3
+Trunk fat percentage [23127],numeric,3.3
+Trunk fat mass [23128],numeric,3.3
+Trunk fat-free mass [23129],numeric,3.4
+Trunk predicted mass [23130],numeric,3.4
+"Pulse rate, automated reading [102]",numeric,5.3
+"Diastolic blood pressure, automated reading [4079]",numeric,5.3
+"Systolic blood pressure, automated reading [4080]",numeric,5.3
+Hand grip strength (left) [46],numeric,0.6
+Hand grip strength (right) [47],numeric,0.5
+Forced vital capacity (FVC) [3062],numeric,13.1
+Forced expiratory volume in 1-second (FEV1) [3063],numeric,13.1
+Peak expiratory flow (PEF) [3064],numeric,13.1
+Father still alive [1797],categorical,1.7
+Father's age at death [1807],numeric,18.5
+Mother still alive [1835],categorical,1.7
+Number of full brothers [1873],numeric,1.7
+Number of full sisters [1883],numeric,1.7
+Number of days/week walked 10+ minutes [864],numeric,0.0
+Duration of walks [874],numeric,6.9
+Number of days/week of moderate physical activity 10+ minutes [884],numeric,0.0
+Duration of moderate activity [894],numeric,23.4
+Number of days/week of vigorous physical activity 10+ minutes [904],numeric,0.0
+Time spent watching television (TV) [1070],numeric,0.0
+Time spent using computer [1080],numeric,0.1
+Time spent driving [1090],numeric,0.0
+Summed days activity [22033],numeric,18.8
+Summed minutes activity [22034],numeric,20.8
+MET minutes per week for walking [22037],numeric,20.8
+MET minutes per week for moderate activity [22038],numeric,20.8
+MET minutes per week for vigorous activity [22039],numeric,20.8
+Cooked vegetable intake [1289],numeric,0.0
+Salad / raw vegetable intake [1299],numeric,0.0
+Fresh fruit intake [1309],numeric,0.0
+Dried fruit intake [1319],numeric,0.0
+Bread intake [1438],numeric,0.1
+Cereal intake [1458],numeric,0.0
+Tea intake [1488],numeric,0.0
+Water intake [1528],numeric,0.0
+Time spend outdoors in summer [1050],numeric,0.1
+Time spent outdoors in winter [1060],numeric,0.1
+Childhood sunburn occasions [1737],numeric,0.1
+Frequency of solarium/sunlamp use [2277],numeric,0.1
+Lifetime number of sexual partners [2149],numeric,11.4
+Sleep duration [1160],numeric,0.0
+Exposure to tobacco smoke at home [1269],numeric,8.3
+Exposure to tobacco smoke outside home [1279],numeric,8.3
+White blood cell (leukocyte) count [30000],numeric,2.9
+Red blood cell (erythrocyte) count [30010],numeric,2.9
+Haemoglobin concentration [30020],numeric,2.9
+Haematocrit percentage [30030],numeric,2.9
+Mean corpuscular volume [30040],numeric,2.9
+Mean corpuscular haemoglobin [30050],numeric,2.9
+Mean corpuscular haemoglobin concentration [30060],numeric,2.9
+Red blood cell (erythrocyte) distribution width [30070],numeric,2.9
+Platelet count [30080],numeric,2.9
+Platelet crit [30090],numeric,2.9
+Mean platelet (thrombocyte) volume [30100],numeric,2.9
+Platelet distribution width [30110],numeric,2.9
+Lymphocyte count [30120],numeric,3.1
+Monocyte count [30130],numeric,3.1
+Neutrophill count [30140],numeric,3.1
+Eosinophill count [30150],numeric,3.1
+Basophill count [30160],numeric,3.1
+Nucleated red blood cell count [30170],numeric,3.1
+Lymphocyte percentage [30180],numeric,3.1
+Monocyte percentage [30190],numeric,3.1
+Neutrophill percentage [30200],numeric,3.1
+Eosinophill percentage [30210],numeric,3.1
+Basophill percentage [30220],numeric,3.1
+Nucleated red blood cell percentage [30230],numeric,3.1
+Reticulocyte percentage [30240],numeric,4.5
+Reticulocyte count [30250],numeric,4.5
+Mean reticulocyte volume [30260],numeric,4.5
+Mean sphered cell volume [30270],numeric,4.5
+Immature reticulocyte fraction [30280],numeric,4.5
+High light scatter reticulocyte percentage [30290],numeric,4.5
+High light scatter reticulocyte count [30300],numeric,4.5
+Albumin [30600],numeric,12.6
+Alkaline phosphatase [30610],numeric,4.6
+Alanine aminotransferase [30620],numeric,4.7
+Apolipoprotein A [30630],numeric,13.0
+Apolipoprotein B [30640],numeric,5.4
+Aspartate aminotransferase [30650],numeric,5.0
+Direct bilirubin [30660],numeric,17.7
+Urea [30670],numeric,4.7
+Calcium [30680],numeric,12.6
+Cholesterol [30690],numeric,4.6
+Creatinine [30700],numeric,4.7
+C-reactive protein [30710],numeric,4.9
+Cystatin C [30720],numeric,4.6
+Gamma glutamyltransferase [30730],numeric,4.7
+HDL cholesterol [30760],numeric,12.7
+IGF-1 [30770],numeric,5.1
+LDL direct [30780],numeric,4.8
+Phosphate [30810],numeric,12.7
+SHBG [30830],numeric,13.3
+Total bilirubin [30840],numeric,5.0
+Testosterone [30850],numeric,13.3
+Total protein [30860],numeric,12.7
+Triglycerides [30870],numeric,4.7
+Urate [30880],numeric,4.7
+Vitamin D [30890],numeric,7.8
+Creatinine (enzymatic) in urine [30510],numeric,3.6
+Potassium in urine [30520],numeric,3.8
+Sodium in urine [30530],numeric,3.8
+Wears glasses or contact lenses [2207],categorical,0.0
+Chest pain or discomfort [2335],categorical,0.0
+Father had alzheimer's disease/dementia [20107],numeric,0.0
+Father had bowel cancer [20107],numeric,0.0
+Father had chronic bronchitis/emphysema [20107],numeric,0.0
+Father had diabetes [20107],numeric,0.0
+Father had heart disease [20107],numeric,0.0
+Father had high blood pressure [20107],numeric,0.0
+Father had lung cancer [20107],numeric,0.0
+Father had parkinson's disease [20107],numeric,0.0
+Father had prostate cancer [20107],numeric,0.0
+Father had severe depression [20107],numeric,0.0
+Father had stroke [20107],numeric,0.0
+Mother had alzheimer's disease/dementia [20110],numeric,0.0
+Mother had bowel cancer [20110],numeric,0.0
+Mother had breast cancer [20110],numeric,0.0
+Mother had chronic bronchitis/emphysema [20110],numeric,0.0
+Mother had diabetes [20110],numeric,0.0
+Mother had heart disease [20110],numeric,0.0
+Mother had high blood pressure [20110],numeric,0.0
+Mother had lung cancer [20110],numeric,0.0
+Mother had parkinson's disease [20110],numeric,0.0
+Mother had severe depression [20110],numeric,0.0
+Mother had stroke [20110],numeric,0.0
+Siblings had alzheimer's disease/dementia [20111],numeric,0.0
+Siblings had bowel cancer [20111],numeric,0.0
+Siblings had breast cancer [20111],numeric,0.0
+Siblings had chronic bronchitis/emphysema [20111],numeric,0.0
+Siblings had diabetes [20111],numeric,0.0
+Siblings had heart disease [20111],numeric,0.0
+Siblings had high blood pressure [20111],numeric,0.0
+Siblings had lung cancer [20111],numeric,0.0
+Siblings had parkinson's disease [20111],numeric,0.0
+Siblings had prostate cancer [20111],numeric,0.0
+Siblings had severe depression [20111],numeric,0.0
+Siblings had stroke [20111],numeric,0.0

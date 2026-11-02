@@ -1,76 +1,102 @@
-# Non-glycaemic machine learning for type 2 diabetes in the UK Biobank
+# T2D prediction without glycaemic testing — reproduction guide
 
-Code accompanying the manuscript:
+Code and aggregate results for: *Detection and prediction of type 2 diabetes from routine
+clinical data without glycaemic testing: sex-specific models developed in UK Biobank and
+externally validated in NHANES.*
 
-> **Routine clinical data, not genetics, identify and predict type 2 diabetes without glycaemic testing: a machine learning study in the UK Biobank**
-> Nedunkulathil SP, Henschel A, Zalloua P, Aung Z, Kamarul Azman S. *(submitted)*
+UK Biobank Application Number **64823**.
 
-The study develops sex- and age-specific machine learning models that identify existing (prevalent) type 2 diabetes (T2D) and predict future (incident) T2D **without glucose or HbA1c**, tests the added value of a genetic risk score, and externally validates the approach in NHANES 2017–March 2020.
+---
 
-## Data availability
+## 1. Software versions
 
-**UK Biobank data are not included in this repository.** They are available to approved researchers on application to the UK Biobank (https://www.ukbiobank.ac.uk). This repository contains code, SNP lists and aggregate (non-identifiable) results only.
-
-NHANES 2017–March 2020 public-use files can be downloaded from the CDC: https://wwwn.cdc.gov/nchs/nhanes/
-
-## Repository structure
-
-```
-code/            analysis scripts (Python)
-results/         aggregate results reported in the manuscript (no participant-level data)
-snp_lists/       variant lists used for the genetic analyses
-prs_scripts/     optional scripts to compute the PGS000014 polygenic score on the UK Biobank RAP
-run_all.sh       runs the full analysis in order
-requirements.txt Python dependencies
-```
-
-## Input files (place in `data/`, not shared)
-
-| File | Content |
+| Component | Version |
 |---|---|
-| `medical_history_3.tsv` | Prevalent analysis: baseline phenotypes and `HasT2D` (10,443 cases, 10,473 controls) |
-| `medical_history_fut.tsv` | Participants diagnosed with T2D after baseline, with `Days until E11 diagnosis` |
-| `T2D_geno.tsv` | Genotypes of the 105 GWAS Catalog array variants |
-| `T2D_4.bed/.bim`, `T2D_12.bed/.bim/.fam` | PLINK files for the genetic risk score variant sets |
-| `PCA.bed/.bim/.fam` | LD-pruned array variants for principal component analysis |
-| `nhanes/*.xpt` | NHANES 2017–March 2020 files: P_DEMO, P_BMX, P_BPXO, P_BIOPRO, P_CBC, P_HDL, P_TRIGLY, P_HSCRP, P_GLU, P_DIQ |
+| Python | 3.11.17 |
+| numpy | 2.4.6 |
+| pandas | 2.3.3 |
+| scipy | 1.17.1 |
+| scikit-learn | 1.9.1 |
+| lightgbm | 4.7.0 |
+| statsmodels | 0.15.0 |
+| matplotlib | 3.11.2 |
+| R | 4.5.3 |
+| pmsampsize | 1.1.3 |
 
-Paths can be changed with environment variables `T2D_DATA_DIR`, `T2D_OUT_DIR` and `NHANES_DIR`.
+Install with `pip install -r requirements.txt`; the sample-size analysis additionally needs R
+with `install.packages("pmsampsize")`. All analyses used `random_state = 42` / `set.seed(42)`.
 
-## Analysis steps
+## 2. Input data (not redistributable)
 
-| Step | Script | Manuscript |
+| File | Contents | Source |
 |---|---|---|
-| Reproduction of the original single train–test split | `t2d_pipeline.py A` | Suppl. Table S2 |
-| Repeated 5 × 5-fold cross-validation, five algorithms (one sex–age group at a time, 0–9) | `t2d_pipeline.py B <k>` | Tables 1–2, Suppl. Tables S3–S5 |
-| Incident T2D prediction and time-to-diagnosis analysis | `t2d_pipeline.py C` | Table 3 |
-| Feature importance and simple clinical benchmark | `extra.py` | Figures 3–4 |
-| Sensitivity analysis (stricter case/control definitions) | `sens.py` | Suppl. Table S9 |
-| Matched incident sensitivity analysis | `inc_matched.py` | Table 3 |
-| QC and LD of the 105 GWAS Catalog variants | `snp_qc.py` | Section 3.5 |
-| Six quality-controlled variants and weighted GRS | `geno2.py <k>` | Suppl. Table S6 |
-| 74-variant genetic risk score: QC, LD pruning, TCF7L2 validation | `grs_qc.py` | Section 3.5 |
-| GRS cross-validation | `grs_cv.py <k>` | Figure 2C, Suppl. Table S7 |
-| Genetic principal components | `pca.py` | Section 2.4 |
-| PC-adjusted GRS analysis | `grs_pc.py <k>` | Suppl. Table S8 |
-| External validation in NHANES | `nhanes_ext.py`, `nhanes_val.py` | Table 4 |
-| Summary tables | `summarise.py` | Tables |
-| Figures | `fig1.py`, `figs.py` | Figures 1–4 |
+| `medical_history_3.tsv` | 20,916 x 185. Case-finding analysis set, one row per EID | UK Biobank application 64823 |
+| `medical_history_fut.tsv` | 26,975 x 183. Participants diagnosed after baseline, with `Days until E11 diagnosis` | UK Biobank application 64823 |
+| `T2D_geno.tsv` | Array genotypes for the 105 selected variants | UK Biobank field 22418 |
+| `P_DEMO.xpt` … `P_GHB.xpt` | NHANES 2017-March 2020 public-use files | wwwn.cdc.gov (free) |
 
-## Requirements
+UK Biobank data cannot be redistributed. NHANES files download automatically (see 3.5).
 
-Python ≥3.9; see `requirements.txt`. The analyses were run on a single CPU core; cross-validation takes approximately 1–2 minutes per sex–age group.
+**Do not use `medical_history.tsv`.** It is a defective intermediate: an unkeyed
+`study.merge(fam_hist)` in `Cohorting-1.ipynb` produced 23,188,684 rows for 20,916
+participants. It never fed the modelling data and no published result depends on it. It has
+been removed from this repository and the merge corrected (see `code/cohorting_fix.py`).
 
-## Methods summary
+## 3. Reproducing each table and figure
 
-- Prevalent T2D: ICD-10 E11 in hospital records up to 2010; controls reduced by stratified downsampling (age, sex, family history) to the number of cases; ten sex–age groups.
-- Incident T2D: first E11 diagnosis after baseline; participants with baseline HbA1c ≥48 mmol/mol excluded.
-- Models: LightGBM, L1-penalised logistic regression, random forest, extremely randomised trees, decision tree.
-- Evaluation: repeated stratified five-fold cross-validation (5 × 5); corrected resampled t-test (Nadeau & Bengio 2003).
-- Genetics: 74 independent genome-wide significant variants (GWAS Catalog, P < 5 × 10⁻⁸; LD r² < 0.1); fold-specific weights; adjustment for 10 genetic PCs.
+Set `T2D_DATA_DIR` to the directory holding the input files, then run from `code/`.
 
+| Output | Command | Writes |
+|---|---|---|
+| Table 1 (baseline characteristics) | `python baseline_table.py` | `results/Table1_baseline_characteristics.csv` |
+| Table 2 (incident prediction) | `python t2d_pipeline.py C` | `results/C_incident_folds.csv`, `C_incident_horizon.csv`, `C_simple_benchmark.csv`; `python inc_matched.py` adds `INC_matched.csv` |
+| Table 2, FINDRISC rows | `python findrisc.py` | `results/FINDRISC_comparison.csv` |
+| Table 3 (case-finding by stratum) | `python t2d_pipeline.py B` | `results/B_summary.csv` |
+| Table 4 (NHANES, unweighted + weighted) | `python nhanes_val.py` then `python nhanes_weighted.py` | `results/NHANES_validation.csv`, `results/Table4_weighted.csv` |
+| Table 5 (calibration, utility) | `python calibration_dca.py` | `results/Calibration.csv`, `OperatingPoints.csv`, `DecisionCurve.csv` |
+| Figure 1 (study design) | `python fig1.py` | `figures/Figure1.png` |
+| Figure 2 (incident prediction) | `python figs.py --panel incident` | `figures/Figure2.png` |
+| Figure 3 (algorithms + GRS) | `python figs.py --panel algorithms` | `figures/Figure3.png` |
+| Figure 4 (predictor importance) | `python figs.py --panel importance` | `figures/Figure4.png` |
+| Figure 5 (calibration, utility, leakage) | `python calibration_dca.py --figure` | `figures/Figure5.png` |
+| Supp S1–S9 | `bash run_all.sh` | `results/*.csv` |
+| Supp S10 (TRIPOD+AI) | manual; item text from Collins et al. BMJ 2024;385:e078378 | — |
+| Supp S11 (predictor list) | `python predictor_list.py` | `results/S11_predictors.csv` |
+| Supp S12 (NHANES harmonisation) | `python nhanes_val.py --dump-harmonisation` | `results/S12_harmonisation.csv` |
+| Supp S13 (per-predictor leakage) | `python leakage.py` | `results/leakage_per_predictor.csv` |
+| Supp S14 (sample size) | `python sample_size.py` then `Rscript sample_size.R` | `results/ss_results.csv` |
+| Supp S15 (outcome misclassification) | `python outcome_misclass.py` | `results/outcome_misclassification.csv` |
+| Supp S16 (model coefficients) | `python deposit_model.py` | `results/S16_logistic_coefficients.csv`, `models/LightGBM_harmonised_*.txt` |
+| Supp S17 (UKB vs NHANES distributions) | `python nhanes_val.py --compare-distributions` | `results/S17_distribution_comparison.csv` |
 
+Runtime on 24 cores: `t2d_pipeline.py B` approximately 40 min; `outcome_misclass.py`
+approximately 4 min; everything else under 2 min each.
 
-## Licence
+## 4. Using the fitted model
 
-MIT (see `LICENSE`).
+`results/S16_logistic_coefficients.csv` contains the sex-specific 35-predictor logistic
+regression on both the standardised and the original measurement scale, with the imputation
+median and standardisation constants. To predict: impute missing values with the stated
+median, form the linear predictor as intercept + sum(coefficient_original x predictor), then
+apply the logistic function. This reproduces the fitted pipeline to within 2e-15.
+
+**Recalibration is required.** The development sample was downsampled to a case proportion of
+p1 = 0.4993, so predicted probabilities are not risks. Add
+`log(d1/(1-d1)) - log(0.4993/(1-0.4993))` to the linear predictor, where `d1` is the
+prevalence in the target population. Without this the model over-predicts roughly tenfold.
+Calibration slopes were 0.36-0.77 in NHANES even after this correction, so full model updating
+is advisable before any applied use.
+
+## 5. Known limitations of this code
+
+- Outcomes are hospital inpatient ICD-10 E11 only. The Eastwood et al. algorithm
+  (PLOS One 2016;11:e0162388) cannot be run on this extract: fields 2443, 2976, 6153/6177,
+  20002, 20003 and 4041 and primary-care linkage were not requested. `outcome_misclass.py`
+  tests the component that is testable.
+- QDiabetes-2018 is not implemented; roughly ten of its sixteen predictors are absent.
+- Hyperparameters are fixed (`Supplementary Table S1`), not tuned in nested cross-validation.
+
+## 6. Licence and citation
+
+Code under the licence in `LICENSE`. Please cite the paper and acknowledge UK Biobank
+application 64823.
