@@ -2,8 +2,8 @@
 
 Two of the eight FINDRISC components (antihypertensive medication, history of high blood
 glucose) are absent from this UK Biobank extract, so a six-component score with a maximum of
-19 rather than 26 points is computed. Omitting components can only reduce discrimination, so
-the comparison is conservative in FINDRISC's favour.
+19 rather than 26 points is computed. Activity and fruit/vegetable questions also require proxy mappings.
+This is an exploratory modified score, not a validated implementation of FINDRISC.
 """
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
@@ -15,7 +15,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from common import (load_prevalent, load_incident_cases, family_history, boot_ci,
-                    OUT, SEX, AGE_U, HBA, SEED)
+                    OUT, SEX, AGE_U, HBA, SEED, DATA)
 
 F = {"bmi": "Body mass index (BMI) [21001]", "waist": "Waist circumference [48]",
      "pa": "Number of days/week of moderate physical activity 10+ minutes [884]",
@@ -44,9 +44,12 @@ def findrisc(df):
 
 def main():
     prev = load_prevalent()
-    ctrl = prev[~prev.HasT2D]
+    future = pd.read_csv(os.path.join(DATA, "medical_history_fut.tsv"), sep="\t", usecols=["EID"])
+    assert prev.EID.is_unique and future.EID.is_unique
+    ctrl = prev[~prev.HasT2D.astype(bool) & ~prev.EID.isin(future.EID)]
     ctrl = ctrl[~(pd.to_numeric(ctrl[HBA], errors="coerce") >= 48)]
     inc = pd.concat([load_incident_cases().assign(y=1), ctrl.assign(y=0)], ignore_index=True)
+    assert inc.EID.is_unique, "Cases and controls must be disjoint"
     inc["FINDRISC"] = findrisc(inc)
     rows = []
     for sex in ("Male", "Female"):
@@ -63,10 +66,11 @@ def main():
                      "Modified FINDRISC, AUROC (95% CI)": f"{a:.3f} ({lo:.3f}-{hi:.3f})",
                      "Five-variable comparator, AUROC": f"{roc_auc_score(d.y, pv):.3f}",
                      "FINDRISC complete, %": f"{ok.mean()*100:.1f}"})
-    p = os.path.join(OUT, "FINDRISC_comparison.csv")
+    p = os.path.join(OUT, "FINDRISC_comparison_revised.csv")
     pd.DataFrame(rows).to_csv(p, index=False)
     print(pd.DataFrame(rows).to_string(index=False)); print("wrote", p)
 
 
 if __name__ == "__main__":
     main()
+

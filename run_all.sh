@@ -14,7 +14,10 @@ python3 grs_qc.py
 for k in $(seq 0 9); do python3 grs_cv.py $k; done
 python3 pca.py
 for k in $(seq 0 9); do python3 grs_pc.py $k; done
-python3 nhanes_ext.py && python3 nhanes_val.py
+python3 nhanes_val.py
+python3 calibration_dca.py
+python3 deposit_model.py
 python3 summarise.py
 python3 fig1.py && python3 figs.py
 echo "Done. Results in ../results, figures in ../figures"
+

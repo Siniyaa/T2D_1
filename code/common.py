@@ -110,12 +110,15 @@ def fit_harmonised(df_prev, sex):
     X, y = harmonised_X(sub), sub["HasT2D"].astype(int).values
     gbm = lgb.LGBMClassifier(learning_rate=0.09, max_depth=-1,
                              random_state=SEED, verbose=-1).fit(X, y)
-    try:
-        lr = LogisticRegression(solver="liblinear", l1_ratio=1, C=1.0,
-                                max_iter=5000, random_state=SEED)
-    except TypeError:                                    # scikit-learn < 1.8
-        lr = LogisticRegression(penalty="l1", solver="liblinear", C=1.0,
-                                max_iter=5000, random_state=SEED)
+    # l1_ratio exists in older sklearn releases but does not select L1 there.
+    import inspect
+    default_penalty = inspect.signature(LogisticRegression).parameters.get("penalty")
+    opts = {"solver": "liblinear", "C": 1.0, "max_iter": 5000, "random_state": SEED}
+    if default_penalty is not None and default_penalty.default != "deprecated":
+        opts["penalty"] = "l1"
+    else:
+        opts["l1_ratio"] = 1.0
+    lr = LogisticRegression(**opts)
     pipe = Pipeline([("imp", SimpleImputer(strategy="median")),
                      ("sc", StandardScaler()), ("lr", lr)]).fit(X, y)
     return gbm, pipe, X, y
@@ -206,3 +209,12 @@ def boot_ci(y, p, n=1000, seed=7):
         if len(np.unique(y[b])) > 1:
             out.append(roc_auc_score(y[b], p[b]))
     return float(np.percentile(out, 2.5)), float(np.percentile(out, 97.5))
+
+
+
+def load_survey_design():
+    """Full survey design, before age/sex/outcome domain selection."""
+    demo = pd.read_sas(os.path.join(NH, "P_DEMO.xpt"), format="xport")
+    fast = pd.read_sas(os.path.join(NH, "P_TRIGLY.xpt"), format="xport")
+    return demo[["SEQN", "SDMVSTRA", "SDMVPSU", "WTMECPRP"]].merge(
+        fast[["SEQN", "WTSAFPRP"]], on="SEQN", how="left", validate="one_to_one")

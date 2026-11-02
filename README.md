@@ -1,102 +1,66 @@
-# T2D prediction without glycaemic testing — reproduction guide
+# Non-glycaemic T2D models: reproduction and revision status
 
-Code and aggregate results for: *Detection and prediction of type 2 diabetes from routine
-clinical data without glycaemic testing: sex-specific models developed in UK Biobank and
-externally validated in NHANES.*
+Code, aggregate results and diagnostic LightGBM models for the UK Biobank / NHANES study (UK Biobank Application 64823).
 
-UK Biobank Application Number **64823**.
+## Status: corrected code requires a study-data rerun
 
----
+The results in `results/` and existing LightGBM models were deposited before the methodological corrections in this branch. They have **not** been recomputed by this change. Do not relabel them as outputs of the corrected code.
 
-## 1. Software versions
+The earlier unweighted NHANES pipeline used different blood-count predictors, a different cholesterol source, and default L2 regression; the weighted pipeline used `common.py` and L1 regression. Their estimates are not a controlled comparison of weighting choices. Both evaluations now use the same 36 inputs (35 plus age), fitted model and eligible participants. Original unweighted results are historical sensitivity results only.
 
-| Component | Version |
-|---|---|
-| Python | 3.11.17 |
-| numpy | 2.4.6 |
-| pandas | 2.3.3 |
-| scipy | 1.17.1 |
-| scikit-learn | 1.9.1 |
-| lightgbm | 4.7.0 |
-| statsmodels | 0.15.0 |
-| matplotlib | 3.11.2 |
-| R | 4.5.3 |
-| pmsampsize | 1.1.3 |
+The earlier calibration analysis used the pooled case fraction 0.4993 for two sex-specific models. Correct fractions are computed from each actual training subset. For the reported cohort they are 6,547/11,429 for men and 3,896/9,487 for women. Original calibration, Brier and decision-curve outputs must be regenerated.
 
-Install with `pip install -r requirements.txt`; the sample-size analysis additionally needs R
-with `install.packages("pmsampsize")`. All analyses used `random_state = 42` / `set.seed(42)`.
+## Inputs and installation
 
-## 2. Input data (not redistributable)
+Use Python 3.11 or later and `pip install -r requirements.txt`. The sample-size analysis also needs R and `pmsampsize`. Exact installed versions are recorded in the model manifest when exports are regenerated. The old README's claimed version list was not an environment lockfile.
 
-| File | Contents | Source |
-|---|---|---|
-| `medical_history_3.tsv` | 20,916 x 185. Case-finding analysis set, one row per EID | UK Biobank application 64823 |
-| `medical_history_fut.tsv` | 26,975 x 183. Participants diagnosed after baseline, with `Days until E11 diagnosis` | UK Biobank application 64823 |
-| `T2D_geno.tsv` | Array genotypes for the 105 selected variants | UK Biobank field 22418 |
-| `P_DEMO.xpt` … `P_GHB.xpt` | NHANES 2017-March 2020 public-use files | wwwn.cdc.gov (free) |
+Set `T2D_DATA_DIR` to the directory containing:
 
-UK Biobank data cannot be redistributed. NHANES files download automatically (see 3.5).
+- `medical_history_3.tsv`: 20,916 unique participants, with EID, HasT2D, baseline clinical measurements and sex.
+- `medical_history_fut.tsv`: post-baseline recorded E11 cases, EID and time to recorded diagnosis.
+- `T2D_geno.tsv`: genotypes for the genetic analyses.
 
-**Do not use `medical_history.tsv`.** It is a defective intermediate: an unkeyed
-`study.merge(fam_hist)` in `Cohorting-1.ipynb` produced 23,188,684 rows for 20,916
-participants. It never fed the modelling data and no published result depends on it. It has
-been removed from this repository and the merge corrected (see `code/cohorting_fix.py`).
+UK Biobank inputs are restricted and must not be committed. `NHANES_DIR` holds the public 2017–March 2020 XPT files, downloaded by `common.load_nhanes()` if absent. `T2D_OUT_DIR` selects the results directory. For compatibility with the original pipeline, directory variables should end in `/`.
 
-## 3. Reproducing each table and figure
+Run commands from `code/`. The original `medical_history.tsv` is a defective intermediate and must not be used. The keyed merge is documented in `cohorting_fix.py`.
 
-Set `T2D_DATA_DIR` to the directory holding the input files, then run from `code/`.
+## Regenerate the corrected external analyses
 
-| Output | Command | Writes |
-|---|---|---|
-| Table 1 (baseline characteristics) | `python baseline_table.py` | `results/Table1_baseline_characteristics.csv` |
-| Table 2 (incident prediction) | `python t2d_pipeline.py C` | `results/C_incident_folds.csv`, `C_incident_horizon.csv`, `C_simple_benchmark.csv`; `python inc_matched.py` adds `INC_matched.csv` |
-| Table 2, FINDRISC rows | `python findrisc.py` | `results/FINDRISC_comparison.csv` |
-| Table 3 (case-finding by stratum) | `python t2d_pipeline.py B` | `results/B_summary.csv` |
-| Table 4 (NHANES, unweighted + weighted) | `python nhanes_val.py` then `python nhanes_weighted.py` | `results/NHANES_validation.csv`, `results/Table4_weighted.csv` |
-| Table 5 (calibration, utility) | `python calibration_dca.py` | `results/Calibration.csv`, `OperatingPoints.csv`, `DecisionCurve.csv` |
-| Figure 1 (study design) | `python fig1.py` | `figures/Figure1.png` |
-| Figure 2 (incident prediction) | `python figs.py --panel incident` | `figures/Figure2.png` |
-| Figure 3 (algorithms + GRS) | `python figs.py --panel algorithms` | `figures/Figure3.png` |
-| Figure 4 (predictor importance) | `python figs.py --panel importance` | `figures/Figure4.png` |
-| Figure 5 (calibration, utility, leakage) | `python calibration_dca.py --figure` | `figures/Figure5.png` |
-| Supp S1–S9 | `bash run_all.sh` | `results/*.csv` |
-| Supp S10 (TRIPOD+AI) | manual; item text from Collins et al. BMJ 2024;385:e078378 | — |
-| Supp S11 (predictor list) | `python predictor_list.py` | `results/S11_predictors.csv` |
-| Supp S12 (NHANES harmonisation) | `python nhanes_val.py --dump-harmonisation` | `results/S12_harmonisation.csv` |
-| Supp S13 (per-predictor leakage) | `python leakage.py` | `results/leakage_per_predictor.csv` |
-| Supp S14 (sample size) | `python sample_size.py` then `Rscript sample_size.R` | `results/ss_results.csv` |
-| Supp S15 (outcome misclassification) | `python outcome_misclass.py` | `results/outcome_misclassification.csv` |
-| Supp S16 (model coefficients) | `python deposit_model.py` | `results/S16_logistic_coefficients.csv`, `models/LightGBM_harmonised_*.txt` |
-| Supp S17 (UKB vs NHANES distributions) | `python nhanes_val.py --compare-distributions` | `results/S17_distribution_comparison.csv` |
+```bash
+python nhanes_val.py
+python calibration_dca.py
+python deposit_model.py
+python findrisc.py
+```
 
-Runtime on 24 cores: `t2d_pipeline.py B` approximately 40 min; `outcome_misclass.py`
-approximately 4 min; everything else under 2 min each.
+`nhanes_val.py` writes `NHANES_evaluation_harmonised.csv` (paired weighted and unweighted evaluation of the same fit), `NHANES_internal_harmonised.csv` and `S12_harmonisation.csv`. The two older NHANES entry points delegate to this implementation. Legacy pickle caches are not read.
 
-## 4. Using the fitted model
+Weighted AUROC intervals use a Rao–Wu rescaled PSU bootstrap: draw n_h−1 PSUs within each stratum, then multiply weights by n_h/(n_h−1) times the PSU selection count. All PSUs from the relevant full survey design are retained before age, sex and outcome domain selection. This is a with-replacement first-stage approximation; no finite-population correction is used. Singleton design strata and excessive invalid replicates cause errors. See [survey package documentation](https://r-survey.r-forge.r-project.org/survey/html/bootweights.html) and [NHANES variance guidance](https://wwwn.cdc.gov/nchs/nhanes/tutorials/varianceestimation.aspx).
 
-`results/S16_logistic_coefficients.csv` contains the sex-specific 35-predictor logistic
-regression on both the standardised and the original measurement scale, with the imputation
-median and standardisation constants. To predict: impute missing values with the stated
-median, form the linear predictor as intercept + sum(coefficient_original x predictor), then
-apply the logistic function. This reproduces the fitted pipeline to within 2e-15.
+`calibration_dca.py` writes new `*_sex_specific.csv` files with unweighted and survey-weighted calibration, Brier scores, operating points and decision curves. It evaluates both models, calculates the development case fraction separately by sex and uses the corresponding target-weighted prevalence. It does not overwrite the historical calibration files. Calibration-in-the-large fixes the slope at one; the calibration slope is fitted with an intercept using binomial likelihood.
 
-**Recalibration is required.** The development sample was downsampled to a case proportion of
-p1 = 0.4993, so predicted probabilities are not risks. Add
-`log(d1/(1-d1)) - log(0.4993/(1-0.4993))` to the linear predictor, where `d1` is the
-prevalence in the target population. Without this the model over-predicts roughly tenfold.
-Calibration slopes were 0.36-0.77 in NHANES even after this correction, so full model updating
-is advisable before any applied use.
+These prevalence offsets use the evaluation outcomes and therefore represent **apparent updating**. They are not independently validated recalibration. A constant offset cannot resolve slope miscalibration, predictor-dependent sampling, or the change from diagnosed to undiagnosed disease. Clinical thresholds require uncertainty assessment and independent validation.
 
-## 5. Known limitations of this code
+`deposit_model.py` exports LightGBM text files, full-precision logistic JSON files and a checksum/software manifest. Its reproduction check reads the deposited JSON back from disk. Printed CSV coefficients remain rounded and do not reproduce the pipeline to machine precision.
 
-- Outcomes are hospital inpatient ICD-10 E11 only. The Eastwood et al. algorithm
-  (PLOS One 2016;11:e0162388) cannot be run on this extract: fields 2443, 2976, 6153/6177,
-  20002, 20003 and 4041 and primary-care linkage were not requested. `outcome_misclass.py`
-  tests the component that is testable.
-- QDiabetes-2018 is not implemented; roughly ten of its sixteen predictors are absent.
-- Hyperparameters are fixed (`Supplementary Table S1`), not tuned in nested cross-validation.
+`findrisc.py` now excludes all subsequently diagnosed participants from controls and checks that cases and controls are disjoint. Its six-component score also uses proxies for activity and fruit/vegetable intake; it is not complete validated FINDRISC. The output is `FINDRISC_comparison_revised.csv`; the old comparison used a different and potentially overlapping sample.
 
-## 6. Licence and citation
+## Other analyses
 
-Code under the licence in `LICENSE`. Please cite the paper and acknowledge UK Biobank
-application 64823.
+The original internal-analysis commands remain available: `t2d_pipeline.py A`, `t2d_pipeline.py B`, `t2d_pipeline.py C`, the genetic scripts, `inc_matched.py`, `outcome_misclass.py`, and the R sample-size calculation. `run_all.sh` runs the original sequence and corrected external evaluation. Scripts may require all restricted inputs and the documented working directory.
+
+Original table numbers in result filenames refer to the pre-revision manuscript. In the edited manuscript, Table 3 contains reported weighted external estimates; original unweighted estimates are in Supplementary Table S19 and original calibration outputs in S18. Replace these values and their method descriptions after the corrected runs, then update the manuscript, captions and checklist together.
+
+## Validation and limitations
+
+Run focused numerical checks from the repository root:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+These verify the corrected numerical functions with synthetic data. They do not verify study results. The revision environment lacked UK Biobank participant inputs, LightGBM and downloadable NHANES inputs, so no full analysis rerun was completed.
+
+Remaining scientific reporting needs include the full cohort eligibility flow, administrative follow-up end, treatment of death and missing baseline HbA1c, actual prognostic feature count, group-specific missingness and an adequate sample-size assessment. Outcomes use inpatient E11 codes; the complete Eastwood ascertainment algorithm and QDiabetes-2018 cannot be implemented with the documented extract. Hyperparameters were fixed after preliminary tuning; nested tuning was not performed.
+
+Code is provided under `LICENSE`. Manuscript authors must verify the revised methods and all regenerated results before submission.
