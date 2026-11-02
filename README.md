@@ -64,3 +64,7 @@ These verify the corrected numerical functions with synthetic data. They do not 
 Remaining scientific reporting needs include the full cohort eligibility flow, administrative follow-up end, treatment of death and missing baseline HbA1c, actual prognostic feature count, group-specific missingness and an adequate sample-size assessment. Outcomes use inpatient E11 codes; the complete Eastwood ascertainment algorithm and QDiabetes-2018 cannot be implemented with the documented extract. Hyperparameters were fixed after preliminary tuning; nested tuning was not performed.
 
 Code is provided under `LICENSE`. Manuscript authors must verify the revised methods and all regenerated results before submission.
+
+## Revised manuscript plots
+
+`python figures/revised_submission_plots.py` recreates the two main figures and the supplementary AUROC-difference figure from reported aggregate values. These are deterministic plots assisted by Codex (GPT-6, OpenAI), not regenerated study estimates. Replace the embedded historical weighted intervals with verified outputs after the analysis rerun.
