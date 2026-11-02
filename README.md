@@ -68,3 +68,17 @@ Code is provided under `LICENSE`. Manuscript authors must verify the revised met
 ## Revised manuscript plots
 
 `python figures/revised_submission_plots.py` recreates the two main figures and the supplementary AUROC-difference figure from reported aggregate values. These are deterministic plots assisted by Codex (GPT-6, OpenAI), not regenerated study estimates. Replace the embedded historical weighted intervals with verified outputs after the analysis rerun.
+
+## Generate the manuscript revision outputs in one run
+
+From a clean checkout of this branch, with the requirements installed, run:
+
+```bash
+python code/submission_rerun.py --data-dir /absolute/path/to/ukb_extracts --nhanes-dir /absolute/path/to/nhanes --output-dir /absolute/path/to/new_revision_run
+```
+
+Use a new output directory separate from both inputs. Add `--check-only` to check local prerequisites without running the analyses. The full command runs the unified external evaluation, sex-specific exploratory calibration and full-precision model export, then creates `T2D_revision_outputs.zip`. The package uses an explicit allowlist of aggregate outputs and model exports; participant extracts and unlisted files are excluded. Review the package under the applicable data-access rules before sharing.
+
+The run also provides group-specific baseline missingness and an audit of selected cohort counts, retained missing HbA1c and the actual prognostic input columns. It cannot reconstruct source-control eligibility before the supplied extracts, administrative follow-up end, treatment of deaths during source extraction, or author declarations. Those facts must come from study records.
+
+The existing `C_incident_importance.csv` resolves the earlier predictor-count question: all 50 fold columns have 175 predictor rows including age. `Duration of moderate activity [894]` is absent from this matrix but present in the 176-variable general inventory. This is a verified historical feature-count correction; it is not a study-data rerun.
