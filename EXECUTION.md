@@ -6,7 +6,7 @@ Run all commands **from the repository root** and set the three paths explicitly
 
 ```bash
 cd /path/to/T2D_1
-export T2D_DATA_DIR=/path/to/ukb_extract     # medical_history_3.tsv, medical_history_fut.tsv
+export T2D_DATA_DIR=/path/to/ukb_extract     # medical_history_3.tsv, T2D_geno_lasso.tsv
 export NHANES_DIR=$PWD/nhanes                # .xpt files, downloaded on first use
 export T2D_OUT_DIR=$PWD/results
 python -m pip install -r requirements-lock.txt
@@ -26,13 +26,27 @@ individuals. Its scripts and outputs (`incident_primary.py`, `findrisc.py`,
 `figure2_and_glycaemic.py`, `figure2_plot.py`, `cohorting_fix.py`, `inc_matched.py` and the
 `Incident_*`, `FINDRISC_*`, `Glycaemic_*` and `C_incident_*` result files) have been deleted from
 the working tree so that this repository reproduces the submitted manuscript and nothing else.
-They remain in the git history at commit 87ca782d if that work is resumed.
+They remain in the git history at commit 87ca782d if that work is resumed. `code/figs.py` and
+`code/extra.py` were edited at the same time to drop the panels and the benchmark section that
+read those files; `code/figs.py` now draws manuscript Figs 2 and 3 only, and its Fig 2 panel was
+rebuilt on `CaseFinding_performance.csv` and `CaseFinding_grs.csv` so that it shows the
+recomputed five-algorithm comparison and the 69-variant score rather than the superseded
+`B_summary.csv` / `GRS74_summary.csv` versions. `run_all.sh` no longer invokes the deleted
+`inc_matched.py` or the incident mode `t2d_pipeline.py C`. Two further incident outputs that the
+earlier sweep missed, `results/INC_matched.csv` and `results/C_simple_benchmark.csv`, were
+deleted as well. Superseded result files that remain in `results/` for provenance are listed in
+section 5 of `README.md`.
 
 ## Order
 
 ```bash
+python code/baseline_table.py          # Table1_baseline_characteristics.csv
+python code/predictor_list.py          # S11_predictors.csv
 python code/case_finding.py            # CaseFinding_performance.csv, CaseFinding_tests.csv,
-                                       # CaseFinding_grs.csv
+                                       # CaseFinding_grs.csv, grs_variant_qc.csv
+python code/outcome_misclass.py        # outcome_misclassification.csv
+python code/sample_size.py             # ss_input.csv
+Rscript code/sample_size.R             # ss_results.csv
 python code/calibration_dca.py         # Calibration.csv, DecisionCurve.csv, OperatingPoints.csv
 python code/leakage.py                 # leakage_per_predictor.csv  (500 replicates; prints the
                                        # shared-control counts for the two outcome samples)
@@ -42,9 +56,11 @@ python code/nhanes_frames.py           # NHANES_frame_sensitivity.csv,
 python code/deposit_model.py           # models/*.txt, S16_coefficients_full_precision.csv
                                        # (prints the reload check)
 
-python code/figure1_design.py            # Figure1.png  (manuscript Figure 1)
-python code/figure2_plot.py              # Figure2_incident.png (manuscript Figure 6)
-python code/calibration_dca.py --figures # Figure5.png (Figure 4), Figure6.png (Figure 5)
+python code/figure1_design.py            # Figure1.png  (manuscript Fig 1, and S1 Fig)
+python code/extra.py                     # prev_gain_importance.csv (input to Fig 3)
+python code/figs.py                      # Figure2_algorithms_grs.* (Fig 2),
+                                         # Figure3_importance.*     (Fig 3)
+python code/calibration_dca.py --figures # Figure5.png (Fig 4), Figure6.png (Fig 5)
 ```
 
 Seeds: 42 for model fitting and partitioning; 7 for bootstrap resampling (11 in `leakage.py`)
@@ -67,8 +83,6 @@ every level to missing and silently drop the predictor.
 * `deposit_model.verify` reloads `S16_coefficients_full_precision.csv` from disk and compares its
   predictions with the fitted pipeline on 400 records, 80 with at least one missing value;
   agreement was 6.1e-16.
-* `findrisc.main` asserts the control pool is disjoint from the incident case set under the
-  signature rule, and reports the removal count.
 
 ## Notes on two analyses added in this revision
 
