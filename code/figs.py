@@ -1,3 +1,13 @@
+"""Figures 2 and 3 of the manuscript.
+
+Figure 2  algorithm comparison and incremental value of the 69-variant genetic risk score,
+          from results/CaseFinding_performance.csv and results/CaseFinding_grs.csv.
+Figure 3  share of total LightGBM gain for the eight most important predictors per stratum,
+          from results/prev_gain_importance.csv (written by code/extra.py).
+
+Figure 1 is drawn by code/figure1_design.py, Figures 4 and 5 by code/calibration_dca.py --figures.
+The incident-prediction panel that this script used to draw was removed with that analysis.
+"""
 import pandas as pd, numpy as np, re, matplotlib.pyplot as plt
 from matplotlib.patches import Patch, FancyBboxPatch, FancyArrowPatch
 from matplotlib.colors import LinearSegmentedColormap
@@ -37,30 +47,61 @@ def domain(n):
     return 'Lifestyle/family history'
 COL={'Lipids':'#1f4e79','Renal':'#2e8b57','Liver':'#c0504d','Endocrine/mineral':'#8064a2','Haematology/inflammation':'#7f7f7f',
      'Cardiorespiratory':'#e69f00','Anthropometry':'#4bacc6','Demographic':'#333333','Lifestyle/family history':'#9c6b30','Genetic':'#d62728'}
-# ---------- Figure 2: CV performance + genetics
-S=pd.read_csv(O+'B_summary.csv'); G=pd.read_csv(O+'B_genetic_comparison.csv')
-MOD=[('LightGBM','#1f4e79','o'),('Logistic regression','#e69f00','s'),('Random forest','#2e8b57','^'),('Extremely randomised trees','#8064a2','v'),('Decision tree','#9e9e9e','D')]
-fig,ax=plt.subplots(1,3,figsize=(7.2,2.7),gridspec_kw={'width_ratios':[1,1,1.05],'wspace':0.55})
-x=np.arange(5)
-for k,sex in enumerate(['Male','Female']):
-    a=ax[k]
-    for j,(m,c,mk) in enumerate(MOD):
-        d=S[(S.sex==sex)&(S.model==m)].set_index('age').loc[AGES]
-        a.errorbar(x+(j-2)*0.07,d.AUROC_mean,yerr=d.AUROC_std,color=c,marker=mk,ms=3.5,lw=1,capsize=1.5,label=m)
-    a.set_xticks(x,AGES,fontsize=6.8,rotation=35,ha='right'); a.set_ylim(0.74,0.94); a.set_xlabel('Age group (years)'); a.grid(axis='y',lw=0.3,alpha=0.5)
-    a.set_title(f"{'AB'[k]}  {sex}s",loc='left',fontweight='bold',fontsize=8.5)
-ax[0].set_ylabel('AUROC (mean ± SD, 25 folds)')
-h,l=ax[0].get_legend_handles_labels(); fig.legend(h,l,fontsize=6.8,frameon=False,loc='lower center',ncol=5,bbox_to_anchor=(0.45,-0.16))
-a=ax[2]; GR=pd.read_csv(O+'GRS74_summary.csv')
-for k,(sex,c) in enumerate([('Male','#1f4e79'),('Female','#c0504d')]):
-    d=GR[GR.sex==sex].set_index('age').loc[AGES]
-    a.errorbar(x+(k-0.5)*0.18,d.dAUROC,yerr=d.dSD,fmt='o',color=c,ms=4,capsize=2,lw=1,label=sex+'s')
-a.axhline(0,color='black',lw=0.7); a.set_xticks(x,AGES,fontsize=6.8,rotation=35,ha='right'); a.set_ylim(-0.03,0.03)
-a.set_xlabel('Age group (years)'); a.set_ylabel('ΔAUROC (clinical + GRS − clinical)'); a.grid(axis='y',lw=0.3,alpha=0.5)
-a.legend(fontsize=6.5,frameon=False,loc='upper left'); a.set_title('C  Genetic risk score',loc='left',fontweight='bold',fontsize=8.5)
-a.text(0.98,0.03,'All P ≥ 0.06',transform=a.transAxes,ha='right',fontsize=6.5,style='italic')
-save(fig,'Figure2_performance')
-# ---------- Figure 3: prevalent gain heatmap
+# ---------- Figure 2 (manuscript Fig 2): algorithm comparison + 69-variant GRS
+# Drawn from the recomputed case-finding run (code/case_finding.py), in which all five
+# algorithms share the same 175 clinical predictors and the same folds. This supersedes the
+# earlier panel built from B_summary.csv / GRS74_summary.csv, which used a different predictor
+# set and the 74-variant score and is no longer reported.
+try:
+    from figure_style import apply_figure_style; apply_figure_style()
+except Exception: pass
+from scipy import stats as _st
+AGE_CF=['<50','50-54','55-59','60-64','>=65']
+P=pd.read_csv(O+'CaseFinding_performance.csv'); GR=pd.read_csv(O+'CaseFinding_grs.csv')
+P['Age group']=pd.Categorical(P['Age group'],AGE_CF,ordered=True)
+GR['Age group']=pd.Categorical(GR['Age group'],AGE_CF,ordered=True)
+STY={'LightGBM':('#1f4e79','o','-'),'L1-penalised logistic regression':('#2a9d9d','s','-'),
+     'Random forest':('#777777','^','-'),'Extremely randomised trees':('#9e9e9e','v','-'),
+     'Decision tree':('#c4c4c4','D','-')}
+LAB={'L1-penalised logistic regression':'Logistic regression','Extremely randomised trees':'Extra trees'}
+gg=GR.sort_values(['Sex','Age group'],ascending=[False,True]).reset_index(drop=True)
+se=(gg.difference/gg.t).abs(); tcrit=_st.t.ppf(0.975,24)
+lo=gg.difference-tcrit*se; hi=gg.difference+tcrit*se
+fig=plt.figure(figsize=(7.2,7.6))
+gs=fig.add_gridspec(2,2,height_ratios=[1.0,1.15],hspace=0.45,wspace=0.22)
+axA,axB=fig.add_subplot(gs[0,0]),fig.add_subplot(gs[0,1]); axC=fig.add_subplot(gs[1,:])
+for ax,sex,ttl in ((axA,'Male','Men'),(axB,'Female','Women')):
+    for alg in STY:
+        d=P[(P.Sex==sex)&(P.Algorithm==alg)].sort_values('Age group')
+        c,mk,ls=STY[alg]
+        ax.errorbar(range(5),d.AUROC,yerr=d.AUROC_sd,color=c,marker=mk,ls=ls,ms=4.5,lw=1.5,
+                    capsize=2.5,label=LAB.get(alg,alg))
+    ax.set_xticks(range(5)); ax.set_xticklabels(['<50','50-54','55-59','60-64','\u226565'])
+    ax.set_xlabel('Age group (years)'); ax.set_title(ttl,loc='left',fontsize=10); ax.set_ylim(0.77,0.93)
+    for s_ in ('top','right'): ax.spines[s_].set_visible(False)
+axA.set_ylabel('AUROC (mean \u00b1 SD)'); axB.tick_params(labelleft=False)
+axA.legend(frameon=False,fontsize=7.5,loc='lower left')
+y=np.arange(10); cols=['#1f4e79' if s=='Male' else '#c0504d' for s in gg.Sex]
+axC.axvline(0,color='0.45',lw=1.0,zorder=0)
+for i_ in range(10):
+    axC.plot([lo[i_],hi[i_]],[y[i_],y[i_]],color=cols[i_],lw=1.5)
+    axC.plot(gg.difference[i_],y[i_],'o',color=cols[i_],ms=5,
+             mfc=cols[i_] if gg.P[i_]<0.05 else 'white')
+axC.set_yticks(y)
+axC.set_yticklabels([f"{s}, {a}".replace('>=65','\u226565') for s,a in zip(gg.Sex,gg['Age group'])],fontsize=8)
+axC.invert_yaxis(); axC.set_ylim(9.9,-1.4)
+axC.set_xlabel('Change in AUROC when the 69-variant genetic risk score is added')
+axC.set_title('Incremental value of the genetic risk score',loc='left',fontsize=10)
+axC.text(0.02,0.02,'filled marker: P < 0.05 (corrected resampled t-test)',transform=axC.transAxes,
+         ha='left',va='bottom',fontsize=7.5,color='0.35')
+for s_ in ('top','right'): axC.spines[s_].set_visible(False)
+for ax,l in ((axA,'A'),(axB,'B'),(axC,'C')):
+    ax.text(-0.13,1.07,l,transform=ax.transAxes,fontsize=11,fontweight='bold')
+save(fig,'Figure2_algorithms_grs')
+print('Figure 2 written | intervals excluding zero:',int(((lo>0)|(hi<0)).sum()),
+      '| P<0.05:',int((gg.P<0.05).sum()))
+
+# ---------- Figure 3 (manuscript Fig 3): share of LightGBM gain, top eight per stratum
 I=pd.read_csv(O+'prev_gain_importance.csv',index_col=0)
 top=set()
 for c in I.columns: top|=set(I[c].nlargest(8).index)
@@ -89,25 +130,6 @@ axs[0].set_xlim(-0.5,4.5)
 cb=fig.colorbar(im,ax=axs,orientation='horizontal',fraction=0.025,pad=0.02,aspect=45); cb.set_label('Share of total LightGBM gain (%); grey = outside top 8 in that stratum',fontsize=7); cb.ax.tick_params(labelsize=6.5)
 used=[d for d in DORD if any(domain(r)==d for r in rows)]
 fig.legend(handles=[Patch(color=COL[d],label=d) for d in used],loc='lower center',ncol=4,frameon=False,fontsize=7,bbox_to_anchor=(0.5,0.035))
-save(fig,'Figure3_importance_prevalent')
-# ---------- Figure 4: incident
-H=pd.read_csv(O+'C_incident_horizon.csv'); C=pd.read_csv(O+'C_incident_folds.csv'); B=pd.read_csv(O+'C_simple_benchmark.csv')
-Ii=pd.read_csv(O+'C_incident_importance.csv',index_col=0)
-fig=plt.figure(figsize=(7.2,3.6)); gs=fig.add_gridspec(1,3,width_ratios=[1.25,1,1],wspace=0.95)
-a=fig.add_subplot(gs[0]); hz=['<5 years','5–10 years','≥10 years']
-for k,(sex,c) in enumerate([('Male','#1f4e79'),('Female','#c0504d')]):
-    m=[C[C.sex==sex].AUROC.mean()]+[H[(H.sex==sex)&(H.horizon==h)].AUROC.mean() for h in hz]
-    s=[C[C.sex==sex].AUROC.std()]+[H[(H.sex==sex)&(H.horizon==h)].AUROC.std() for h in hz]
-    a.errorbar(np.arange(4)+(k-0.5)*0.15,m,yerr=s,fmt='o-',color=c,ms=4,capsize=2,lw=1,label=sex+'s')
-    a.errorbar([4+(k-0.5)*0.15],[B[B.sex==sex].AUROC_simple.mean()],yerr=[B[B.sex==sex].AUROC_simple.std()],fmt='s',mfc='white',color=c,ms=4,capsize=2)
-a.set_xticks(range(5),['All','<5 y','5–10 y','≥10 y','Simple\nmodel'],fontsize=6.5,rotation=45,ha='right'); a.set_ylim(0.74,0.9)
-a.set_ylabel('AUROC (mean ± SD)'); a.grid(axis='y',lw=0.3,alpha=0.5); a.axvline(3.5,color='grey',lw=0.5,ls=':')
-a.legend(fontsize=6.5,frameon=False,loc='lower left'); a.set_title('A  Incident T2D',loc='left',fontweight='bold',fontsize=8.5)
-for k,sex in enumerate(['Male','Female']):
-    a=fig.add_subplot(gs[k+1]); v=Ii[[c for c in Ii.columns if c.startswith(sex)]].mean(axis=1); v=(v/v.sum()*100).nlargest(12)[::-1]
-    a.barh(range(len(v)),v.values,color=[COL[domain(n)] for n in v.index]); a.set_yticks(range(len(v)),[label(n) for n in v.index],fontsize=6.8)
-    for i,val in enumerate(v.values): a.text(val+0.3,i,f'{val:.1f}',va='center',fontsize=6)
-    a.set_xlabel('Share of total gain (%)',fontsize=7); a.set_xlim(0,v.max()*1.3); a.tick_params(axis='x',labelsize=6.5)
-    a.set_title(f"{'BC'[k]}  Top predictors, {sex.lower()}s",loc='left',fontweight='bold',fontsize=8.5)
-save(fig,'Figure4_incident')
+save(fig,'Figure3_importance')
+print('Figure 3 written | rows:',len(rows))
 print('ok')
