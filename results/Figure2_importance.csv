@@ -1,0 +1,25 @@
+Sex,Predictor,"Gain, %"
+Male,Waist circumference [48],8.7
+Male,Age when attended assessment centre [21003],5.65
+Male,Body mass index (BMI) [23104],5.63
+Male,LDL direct [30780],5.23
+Male,Body mass index (BMI) [21001],3.15
+Male,Forced vital capacity (FVC) [3062],2.93
+Male,Gamma glutamyltransferase [30730],2.68
+Male,Cholesterol [30690],2.64
+Male,HDL cholesterol [30760],2.48
+Male,Body fat percentage [23099],2.43
+Male,Forced expiratory volume in 1-second (FEV1) [3063],2.33
+Male,Triglycerides [30870],1.94
+Female,Waist circumference [48],27.05
+Female,Age when attended assessment centre [21003],3.84
+Female,Triglycerides [30870],3.3
+Female,Gamma glutamyltransferase [30730],2.76
+Female,Urate [30880],2.67
+Female,Cholesterol [30690],2.62
+Female,SHBG [30830],2.49
+Female,HDL cholesterol [30760],2.33
+Female,Leg fat percentage (left) [23115],2.06
+Female,Forced vital capacity (FVC) [3062],1.67
+Female,Forced expiratory volume in 1-second (FEV1) [3063],1.65
+Female,LDL direct [30780],1.54

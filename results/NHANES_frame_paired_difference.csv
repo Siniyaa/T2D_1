@@ -1,0 +1,5 @@
+Sex,Predictor set,"Diagnosed minus undiagnosed, same frame (95% CI)"
+Male,All 36 predictors,+0.168 (+0.060 to +0.286)
+Male,LDL removed (35),+0.167 (+0.067 to +0.281)
+Female,All 36 predictors,+0.063 (-0.037 to +0.159)
+Female,LDL removed (35),+0.042 (-0.032 to +0.121)

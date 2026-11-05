@@ -2,14 +2,10 @@
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
 import os, pandas as pd, numpy as np
-from common import load_prevalent, load_incident_cases, strata, OUT, SEX, HBA
+from common import load_prevalent, strata, OUT, SEX, HBA
 
-# observed C-statistics from the main analysis (results/B_summary.csv, C_incident_folds.csv)
-CSTAT = {("Male", "<50"): 0.905, ("Male", "50-54"): 0.900, ("Male", "55-59"): 0.892,
-         ("Male", "60-64"): 0.873, ("Male", ">=65"): 0.857,
-         ("Female", "<50"): 0.894, ("Female", "50-54"): 0.891, ("Female", "55-59"): 0.901,
-         ("Female", "60-64"): 0.904, ("Female", ">=65"): 0.881}
-INCIDENT = {"Male": (13805, 9293, 0.818), "Female": (11880, 6520, 0.848)}
+# observed C-statistics from the current case-finding run (results/CaseFinding_performance.csv)
+CSTAT = {("Male", "<50"): 0.905, ("Male", "50-54"): 0.901, ("Male", "55-59"): 0.892, ("Male", "60-64"): 0.872, ("Male", ">=65"): 0.856, ("Female", "<50"): 0.896, ("Female", "50-54"): 0.891, ("Female", "55-59"): 0.901, ("Female", "60-64"): 0.905, ("Female", ">=65"): 0.879}
 HARMONISED = {"Male": 0.897, "Female": 0.905}
 
 
@@ -21,9 +17,6 @@ def main():
                      "events": int(sub.HasT2D.sum()),
                      "prev": round(sub.HasT2D.mean(), 4),
                      "cstat": CSTAT[(sex, lab)], "params": 175})
-    for sex, (n, e, c) in INCIDENT.items():
-        rows.append({"stratum": f"Incident, {sex.lower()}", "n": n, "events": e,
-                     "prev": round(e / n, 4), "cstat": c, "params": 175})
     for sex, c in HARMONISED.items():
         sub = prev[prev[SEX] == sex]
         rows.append({"stratum": f"Harmonised 35-predictor, {sex.lower()}", "n": len(sub),
