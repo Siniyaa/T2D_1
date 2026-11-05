@@ -25,7 +25,8 @@ AGE_N = "RIDAGEYR"
 AGE_BINS = {"<50": (0, 50), "50-54": (50, 55), "55-59": (55, 60),
             "60-64": (60, 65), ">=65": (65, 200)}
 
-# 35 predictors present in both cohorts, already in matching units (see Supplementary Table S12)
+# The 36 model inputs: 35 clinical predictors plus age, in matching units.
+# This mapping is Supplementary Table S12 and MUST stay identical to it.
 MAP = {
  "Waist circumference [48]": "BMXWAIST", "Hip circumference [49]": "BMXHIP",
  "Body mass index (BMI) [21001]": "BMXBMI", "Weight [21002]": "BMXWT",
@@ -41,19 +42,20 @@ MAP = {
  "Urea [30670]": "LBDSBUSI", "Albumin [30600]": "LBDSALSI",
  "Total protein [30860]": "LBDSTPSI", "Total bilirubin [30840]": "LBDSTBSI",
  "Calcium [30680]": "LBDSCASI", "Phosphate [30810]": "LBDSPHSI",
- "Cholesterol [30690]": "LBDTCSI", "HDL cholesterol [30760]": "LBDHDDSI",
- "LDL direct [30780]": "LBDLDLSI", "Triglycerides [30870]": "LBDSTRSI",
+ "Cholesterol [30690]": "LBDSCHSI", "Triglycerides [30870]": "LBDSTRSI",
+ "HDL cholesterol [30760]": "LBDHDDSI", "LDL direct [30780]": "LBDLDLSI",
  "C-reactive protein [30710]": "LBXHSCRP",
  "White blood cell (leukocyte) count [30000]": "LBXWBCSI",
  "Red blood cell (erythrocyte) count [30010]": "LBXRBCSI",
  "Haemoglobin concentration [30020]": "LBXHGB",
  "Haematocrit percentage [30030]": "LBXHCT",
  "Mean corpuscular volume [30040]": "LBXMCVSI",
- "Mean corpuscular haemoglobin [30050]": "LBXMCHSI",
- "Mean corpuscular haemoglobin concentration [30060]": "LBXMC",
  "Red blood cell (erythrocyte) distribution width [30070]": "LBXRDW",
  "Platelet count [30080]": "LBXPLTSI",
- "Mean platelet (thrombocyte) volume [30100]": "LBXMPSI"}
+ "Lymphocyte count [30120]": "LBDLYMNO",
+ "Monocyte count [30130]": "LBDMONO",
+ "Neutrophill count [30140]": "LBDNENO"}
+
 UCOLS = list(MAP) + [AGE_U]
 NCOLS = list(MAP.values()) + [AGE_N]
 SAFE  = [re.sub(r"[^0-9A-Za-z]+", "_", c).strip("_") for c in UCOLS]
@@ -110,19 +112,16 @@ def fit_harmonised(df_prev, sex):
     X, y = harmonised_X(sub), sub["HasT2D"].astype(int).values
     gbm = lgb.LGBMClassifier(learning_rate=0.09, max_depth=-1,
                              random_state=SEED, verbose=-1).fit(X, y)
-    try:
-        lr = LogisticRegression(solver="liblinear", l1_ratio=1, C=1.0,
-                                max_iter=5000, random_state=SEED)
-    except TypeError:                                    # scikit-learn < 1.8
-        lr = LogisticRegression(penalty="l1", solver="liblinear", C=1.0,
-                                max_iter=5000, random_state=SEED)
+    # L2 (scikit-learn default) penalisation: the specification used for the
+    # externally evaluated harmonised model (Supplementary Table S16).
+    lr = LogisticRegression(max_iter=2000, random_state=SEED)
     pipe = Pipeline([("imp", SimpleImputer(strategy="median")),
                      ("sc", StandardScaler()), ("lr", lr)]).fit(X, y)
     return gbm, pipe, X, y
 
 
 NHANES_FILES = ["P_DEMO", "P_BMX", "P_BPXO", "P_DIQ", "P_BIOPRO", "P_CBC",
-                "P_HDL", "P_TCHOL", "P_TRIGLY", "P_HSCRP", "P_GLU", "P_GHB"]
+                "P_HDL", "P_TRIGLY", "P_HSCRP", "P_GLU", "P_GHB"]
 NHANES_BASE = "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/"
 
 
@@ -147,10 +146,10 @@ def load_nhanes():
         bp[["SEQN", "SBP", "DBP", "PULSE"]],
         nh["P_BIOPRO"][["SEQN", "LBXSATSI", "LBXSASSI", "LBXSAPSI", "LBXSGTSI",
                         "LBDSUASI", "LBDSCRSI", "LBDSBUSI", "LBDSALSI", "LBDSTPSI",
-                        "LBDSTBSI", "LBDSCASI", "LBDSPHSI", "LBDSTRSI"]],
+                        "LBDSTBSI", "LBDSCASI", "LBDSPHSI", "LBDSTRSI", "LBDSCHSI"]],
         nh["P_CBC"][["SEQN", "LBXWBCSI", "LBXRBCSI", "LBXHGB", "LBXHCT", "LBXMCVSI",
-                     "LBXMCHSI", "LBXMC", "LBXRDW", "LBXPLTSI", "LBXMPSI"]],
-        nh["P_TCHOL"][["SEQN", "LBDTCSI"]], nh["P_HDL"][["SEQN", "LBDHDDSI"]],
+                     "LBXRDW", "LBXPLTSI", "LBDLYMNO", "LBDMONO", "LBDNENO"]],
+        nh["P_HDL"][["SEQN", "LBDHDDSI"]],
         nh["P_TRIGLY"][["SEQN", "LBDLDLSI", "WTSAFPRP"]],
         nh["P_HSCRP"][["SEQN", "LBXHSCRP"]], nh["P_GLU"][["SEQN", "LBDGLUSI"]],
         nh["P_GHB"][["SEQN", "LBXGH"]], nh["P_DIQ"][["SEQN", "DIQ010", "DID040", "DIQ050"]]]
@@ -206,3 +205,41 @@ def boot_ci(y, p, n=1000, seed=7):
         if len(np.unique(y[b])) > 1:
             out.append(roc_auc_score(y[b], p[b]))
     return float(np.percentile(out, 2.5)), float(np.percentile(out, 97.5))
+
+# ---------------------------------------------------------------------------
+# Shared modelling-matrix construction.
+#
+# A column is treated as NUMERIC if more than half of its non-null values parse
+# as numbers; non-parsing entries ("Do not know", "Prefer not to answer") then
+# become missing, which is the cleaning described in Section 2.3.  A column
+# whose levels are genuinely nominal (e.g. "No"/"Yes") would be destroyed by
+# that rule, so it is instead given pandas `category` dtype with an explicit
+# "NA" level, which LightGBM consumes natively as a categorical feature.
+# Every analysis script uses this one function so that the matrix is identical
+# across them.
+# ---------------------------------------------------------------------------
+NOMINAL_TO_NA = ("do not know", "prefer not to answer", "none of the above")
+
+
+def model_matrix(df, cols, for_lightgbm=True):
+    """Return (X, categorical_columns) with safe names, from the raw frame."""
+    out, cats = {}, []
+    for c in cols:
+        s = df[c]
+        num = pd.to_numeric(s, errors="coerce")
+        n_nonnull = s.notna().sum()
+        if n_nonnull and num.notna().sum() > 0.5 * n_nonnull:
+            out[c] = num                                 # numeric; text -> missing
+        else:
+            v = s.astype(str).str.strip()
+            v = v.where(~v.str.lower().isin(NOMINAL_TO_NA) & s.notna(), "NA")
+            if for_lightgbm:
+                out[c] = pd.Categorical(v)
+            else:                                        # models needing numbers
+                codes = pd.Series(pd.Categorical(v).codes, index=df.index, dtype=float)
+                out[c] = codes.where(~v.eq("NA").values, np.nan)
+            cats.append(c)
+    X = pd.DataFrame(out, index=df.index)
+    safe = lambda n: re.sub(r"[^0-9A-Za-z]+", "_", n).strip("_")
+    X.columns = [safe(c) for c in X.columns]
+    return X, [safe(c) for c in cats]

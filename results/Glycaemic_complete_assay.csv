@@ -1,0 +1,7 @@
+Sex,Model,n (cases),"AUROC, pooled",Difference vs primary (95% CI)
+Male,"Primary, 175 non-glycaemic inputs","11,448 (7,633)",0.826,reference
+Male,"Glycaemic only (HbA1c, glucose)","11,448 (7,633)",0.839,+0.013 (0.004 to 0.022)
+Male,Primary + HbA1c + glucose,"11,448 (7,633)",0.893,+0.068 (0.062 to 0.074)
+Female,"Primary, 175 non-glycaemic inputs","9,678 (5,226)",0.855,reference
+Female,"Glycaemic only (HbA1c, glucose)","9,678 (5,226)",0.841,-0.014 (-0.024 to -0.005)
+Female,Primary + HbA1c + glucose,"9,678 (5,226)",0.903,+0.048 (0.043 to 0.052)

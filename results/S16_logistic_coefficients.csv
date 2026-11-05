@@ -1,75 +1,75 @@
-Sex,Predictor,NHANES variable,Imputation median,Training mean,Training SD,Standardised coefficient,"Coefficient, original units"
-Male,Waist circumference [48],BMXWAIST,101.0,102.9929,13.6426,0.63905,0.046842
-Male,Hip circumference [49],BMXHIP,105.0,106.2955,9.579,-0.39183,-0.040905
-Male,Body mass index (BMI) [21001],BMXBMI,29.1712,29.961,5.2684,0.09074,0.017224
-Male,Weight [21002],BMXWT,89.6,91.8793,17.1945,0.49915,0.02903
-Male,Standing height [50],BMXHT,175.0,175.0493,6.7777,-0.24644,-0.03636
-Male,"Systolic blood pressure, automated reading [4080]",SBP,140.5,141.6208,17.3034,0.271,0.015662
-Male,"Diastolic blood pressure, automated reading [4079]",DBP,82.0,82.3043,9.9607,-0.46134,-0.046316
-Male,"Pulse rate, automated reading [102]",PULSE,69.5,70.6046,12.6985,0.36646,0.028859
-Male,Alanine aminotransferase [30620],LBXSATSI,25.16,28.9908,16.1305,0.23376,0.014492
-Male,Aspartate aminotransferase [30650],LBXSASSI,26.05,28.5462,12.9321,-0.15691,-0.012134
-Male,Alkaline phosphatase [30610],LBXSAPSI,81.2,85.4545,28.7364,0.22149,0.007708
-Male,Gamma glutamyltransferase [30730],LBXSGTSI,37.0,53.8334,64.5218,0.22047,0.003417
-Male,Urate [30880],LBDSUASI,348.0,354.3734,80.3171,-0.39439,-0.00491
-Male,Creatinine [30700],LBDSCRSI,79.7,83.2994,25.111,-0.16253,-0.006472
-Male,Urea [30670],LBDSBUSI,5.68,6.0098,2.0745,0.30705,0.148014
-Male,Albumin [30600],LBDSALSI,45.25,45.2213,2.674,-0.03471,-0.012981
-Male,Total protein [30860],LBDSTPSI,72.19,72.3775,4.0189,0.05305,0.013201
-Male,Total bilirubin [30840],LBDSTBSI,8.83,9.9738,4.9489,-0.00614,-0.00124
-Male,Calcium [30680],LBDSCASI,2.374,2.3764,0.0905,0.30289,3.347955
-Male,Phosphate [30810],LBDSPHSI,1.109,1.1117,0.1568,-0.04169,-0.265786
-Male,Cholesterol [30690],LBDTCSI,4.7155,4.847,1.1998,-0.61047,-0.508821
-Male,HDL cholesterol [30760],LBDHDDSI,1.133,1.1759,0.2933,-0.0684,-0.233199
-Male,LDL direct [30780],LBDLDLSI,2.881,2.9986,0.8946,-0.59337,-0.663271
-Male,Triglycerides [30870],LBDSTRSI,1.856,2.1426,1.2444,0.36545,0.29367
-Male,C-reactive protein [30710],LBXHSCRP,1.51,2.9434,5.0176,-0.01929,-0.003844
-Male,White blood cell (leukocyte) count [30000],LBXWBCSI,7.09,7.3309,2.1017,0.15535,0.073916
-Male,Red blood cell (erythrocyte) count [30010],LBXRBCSI,4.68,4.6688,0.4141,0.0,0.0
-Male,Haemoglobin concentration [30020],LBXHGB,14.8,14.7152,1.2086,-0.28642,-0.236987
-Male,Haematocrit percentage [30030],LBXHCT,42.76,42.5643,3.4779,0.0,0.0
-Male,Mean corpuscular volume [30040],LBXMCVSI,91.3,91.3323,4.5593,0.03913,0.008583
-Male,Mean corpuscular haemoglobin [30050],LBXMCHSI,31.6,31.5878,1.8352,-0.0001,-5.3e-05
-Male,Mean corpuscular haemoglobin concentration [30060],LBXMC,34.52,34.5812,0.9934,0.01733,0.017441
-Male,Red blood cell (erythrocyte) distribution width [30070],LBXRDW,13.44,13.6313,1.0474,0.10166,0.097062
-Male,Platelet count [30080],LBXPLTSI,231.0,235.5136,58.4171,-0.09502,-0.001627
-Male,Mean platelet (thrombocyte) volume [30100],LBXMPSI,9.27,9.3764,1.0939,0.03188,0.02914
-Male,Age when attended assessment centre [21003],RIDAGEYR,61.0,59.4475,7.4667,0.40199,0.053838
-Male,(Intercept),-,-,-,-,0.51787,-3.506306
-Female,Waist circumference [48],BMXWAIST,89.0,91.1222,15.7372,1.06191,0.067478
-Female,Hip circumference [49],BMXHIP,105.0,107.2502,12.9383,-0.74643,-0.057692
-Female,Body mass index (BMI) [21001],BMXBMI,28.2812,29.4877,6.586,0.0,0.0
-Female,Weight [21002],BMXWT,74.1,77.3126,17.5386,0.69564,0.039663
-Female,Standing height [50],BMXHT,162.0,161.9761,6.2968,-0.26861,-0.042659
-Female,"Systolic blood pressure, automated reading [4080]",SBP,136.0,137.1748,18.2412,0.32517,0.017826
-Female,"Diastolic blood pressure, automated reading [4079]",DBP,80.0,80.333,9.6784,-0.44032,-0.045496
-Female,"Pulse rate, automated reading [102]",PULSE,71.5,72.4503,11.6274,0.37682,0.032408
-Female,Alanine aminotransferase [30620],LBXSATSI,19.0,22.5926,14.955,0.36849,0.02464
-Female,Aspartate aminotransferase [30650],LBXSASSI,23.2,25.4929,11.6399,-0.21248,-0.018254
-Female,Alkaline phosphatase [30610],LBXSAPSI,86.6,90.5115,29.6185,0.09731,0.003286
-Female,Gamma glutamyltransferase [30730],LBXSGTSI,24.9,37.5759,44.989,0.17768,0.003949
-Female,Urate [30880],LBDSUASI,279.6,289.3667,77.699,-0.05452,-0.000702
-Female,Creatinine [30700],LBDSCRSI,62.9,65.6715,23.3937,-0.07804,-0.003336
-Female,Urea [30670],LBDSBUSI,5.27,5.5221,1.7379,0.17003,0.097837
-Female,Albumin [30600],LBDSALSI,44.66,44.6621,2.5751,-0.00237,-0.000922
-Female,Total protein [30860],LBDSTPSI,72.085,72.2062,3.831,-0.09521,-0.024853
-Female,Total bilirubin [30840],LBDSTBSI,7.04,7.8336,3.4487,0.05422,0.015721
-Female,Calcium [30680],LBDSCASI,2.389,2.3926,0.0951,0.18508,1.945756
-Female,Phosphate [30810],LBDSPHSI,1.195,1.1942,0.1451,0.03575,0.2464
-Female,Cholesterol [30690],LBDTCSI,5.377,5.4675,1.2307,-1.0733,-0.872093
-Female,HDL cholesterol [30760],LBDHDDSI,1.427,1.4718,0.3679,0.11725,0.318686
-Female,LDL direct [30780],LBDLDLSI,3.244,3.3368,0.929,-0.1503,-0.161785
-Female,Triglycerides [30870],LBDSTRSI,1.559,1.7998,1.0223,0.45937,0.44935
-Female,C-reactive protein [30710],LBXHSCRP,1.84,3.5644,5.3026,-0.01535,-0.002894
-Female,White blood cell (leukocyte) count [30000],LBXWBCSI,7.06,7.3079,1.9591,0.19787,0.100997
-Female,Red blood cell (erythrocyte) count [30010],LBXRBCSI,4.334,4.3295,0.3556,0.55125,1.550133
-Female,Haemoglobin concentration [30020],LBXHGB,13.47,13.4239,1.0573,0.21956,0.207655
-Female,Haematocrit percentage [30030],LBXHCT,39.195,39.0862,3.0266,-0.90973,-0.300581
-Female,Mean corpuscular volume [30040],LBXMCVSI,90.61,90.4387,4.6727,0.62166,0.133041
-Female,Mean corpuscular haemoglobin [30050],LBXMCHSI,31.16,31.0771,2.0667,-0.38654,-0.187033
-Female,Mean corpuscular haemoglobin concentration [30060],LBXMC,34.3,34.3571,1.1853,0.08682,0.073246
-Female,Red blood cell (erythrocyte) distribution width [30070],LBXRDW,13.46,13.6859,1.1631,0.16131,0.138681
-Female,Platelet count [30080],LBXPLTSI,263.0,268.9624,63.7119,-0.08294,-0.001302
-Female,Mean platelet (thrombocyte) volume [30100],LBXMPSI,9.3,9.3923,1.0783,-0.02611,-0.024218
-Female,Age when attended assessment centre [21003],RIDAGEYR,60.0,58.2292,7.7054,0.33215,0.043106
-Female,(Intercept),-,-,-,-,-0.57603,-8.739304
+Sex,Feature,Imputation median,Training mean,Training SD,Standardised coefficient,"Coefficient, original units"
+Male,Waist_circumference_48,101.0,102.9929,13.6426,0.63641,0.046649
+Male,Hip_circumference_49,105.0,106.2955,9.579,-0.39714,-0.041459
+Male,Body_mass_index_BMI_21001,29.1712,29.961,5.2684,0.10191,0.019344
+Male,Weight_21002,89.6,91.8793,17.1945,0.50228,0.029212
+Male,Standing_height_50,175.0,175.0493,6.7777,-0.24578,-0.036263
+Male,Systolic_blood_pressure_automated_reading_4080,140.5,141.6208,17.3034,0.26832,0.015507
+Male,Diastolic_blood_pressure_automated_reading_4079,82.0,82.3043,9.9607,-0.45932,-0.046113
+Male,Pulse_rate_automated_reading_102,69.5,70.6046,12.6985,0.36022,0.028367
+Male,Alanine_aminotransferase_30620,25.16,28.9908,16.1305,0.23468,0.014549
+Male,Aspartate_aminotransferase_30650,26.05,28.5462,12.9321,-0.15422,-0.011925
+Male,Alkaline_phosphatase_30610,81.2,85.4545,28.7364,0.2191,0.007625
+Male,Gamma_glutamyltransferase_30730,37.0,53.8334,64.5218,0.22797,0.003533
+Male,Urate_30880,348.0,354.3734,80.3171,-0.39353,-0.0049
+Male,Creatinine_30700,79.7,83.2994,25.111,-0.17024,-0.00678
+Male,Urea_30670,5.68,6.0098,2.0745,0.30947,0.149181
+Male,Albumin_30600,45.25,45.2213,2.674,-0.04274,-0.015983
+Male,Total_protein_30860,72.19,72.3775,4.0189,0.06042,0.015035
+Male,Total_bilirubin_30840,8.83,9.9738,4.9489,-0.0116,-0.002345
+Male,Calcium_30680,2.374,2.3764,0.0905,0.30722,3.395815
+Male,Phosphate_30810,1.109,1.1117,0.1568,-0.03427,-0.218525
+Male,Cholesterol_30690,4.7155,4.847,1.1998,-0.63945,-0.53297
+Male,Triglycerides_30870,1.856,2.1426,1.2444,0.37035,0.297611
+Male,HDL_cholesterol_30760,1.133,1.1759,0.2933,-0.06718,-0.229042
+Male,LDL_direct_30780,2.881,2.9986,0.8946,-0.57047,-0.637673
+Male,C_reactive_protein_30710,1.51,2.9434,5.0176,-0.02446,-0.004874
+Male,White_blood_cell_leukocyte_count_30000,7.09,7.3309,2.1017,0.25355,0.120641
+Male,Red_blood_cell_erythrocyte_count_30010,4.68,4.6688,0.4141,0.03794,0.091624
+Male,Haemoglobin_concentration_30020,14.8,14.7152,1.2086,-0.24882,-0.205873
+Male,Haematocrit_percentage_30030,42.76,42.5643,3.4779,-0.06991,-0.020101
+Male,Mean_corpuscular_volume_30040,91.3,91.3323,4.5593,0.05766,0.012647
+Male,Red_blood_cell_erythrocyte_distribution_width_30070,13.44,13.6313,1.0474,0.10101,0.096446
+Male,Platelet_count_30080,231.0,235.5136,58.4171,-0.1098,-0.00188
+Male,Lymphocyte_count_30120,1.82,1.9334,1.0223,-0.07861,-0.076903
+Male,Monocyte_count_30130,0.5,0.5451,0.2456,-0.11012,-0.448417
+Male,Neutrophill_count_30140,4.4,4.6056,1.5283,-0.00994,-0.006505
+Male,Age_when_attended_assessment_centre_21003,61.0,59.4475,7.4667,0.40661,0.054457
+Male,(Intercept),,,,0.51947,-3.011992
+Female,Waist_circumference_48,89.0,91.1222,15.7372,1.05952,0.067326
+Female,Hip_circumference_49,105.0,107.2502,12.9383,-0.75376,-0.058258
+Female,Body_mass_index_BMI_21001,28.2812,29.4877,6.586,-0.13235,-0.020096
+Female,Weight_21002,74.1,77.3126,17.5386,0.84069,0.047934
+Female,Standing_height_50,162.0,161.9761,6.2968,-0.32142,-0.051045
+Female,Systolic_blood_pressure_automated_reading_4080,136.0,137.1748,18.2412,0.3213,0.017614
+Female,Diastolic_blood_pressure_automated_reading_4079,80.0,80.333,9.6784,-0.43414,-0.044856
+Female,Pulse_rate_automated_reading_102,71.5,72.4503,11.6274,0.37616,0.032351
+Female,Alanine_aminotransferase_30620,19.0,22.5926,14.955,0.36893,0.02467
+Female,Aspartate_aminotransferase_30650,23.2,25.4929,11.6399,-0.21089,-0.018118
+Female,Alkaline_phosphatase_30610,86.6,90.5115,29.6185,0.09525,0.003216
+Female,Gamma_glutamyltransferase_30730,24.9,37.5759,44.989,0.1848,0.004108
+Female,Urate_30880,279.6,289.3667,77.699,-0.05224,-0.000672
+Female,Creatinine_30700,62.9,65.6715,23.3937,-0.08102,-0.003464
+Female,Urea_30670,5.27,5.5221,1.7379,0.16847,0.096941
+Female,Albumin_30600,44.66,44.6621,2.5751,-0.00157,-0.00061
+Female,Total_protein_30860,72.085,72.2062,3.831,-0.0921,-0.02404
+Female,Total_bilirubin_30840,7.04,7.8336,3.4487,0.05434,0.015757
+Female,Calcium_30680,2.389,2.3926,0.0951,0.18306,1.924486
+Female,Phosphate_30810,1.195,1.1942,0.1451,0.03997,0.275534
+Female,Cholesterol_30690,5.377,5.4675,1.2307,-1.0393,-0.844469
+Female,Triglycerides_30870,1.559,1.7998,1.0223,0.45809,0.448103
+Female,HDL_cholesterol_30760,1.427,1.4718,0.3679,0.10594,0.287946
+Female,LDL_direct_30780,3.244,3.3368,0.929,-0.18226,-0.196192
+Female,C_reactive_protein_30710,1.84,3.5644,5.3026,-0.01921,-0.003623
+Female,White_blood_cell_leukocyte_count_30000,7.06,7.3079,1.9591,0.75694,0.386367
+Female,Red_blood_cell_erythrocyte_count_30010,4.334,4.3295,0.3556,0.44702,1.25706
+Female,Haemoglobin_concentration_30020,13.47,13.4239,1.0573,-0.07507,-0.070997
+Female,Haematocrit_percentage_30030,39.195,39.0862,3.0266,-0.52507,-0.173487
+Female,Mean_corpuscular_volume_30040,90.61,90.4387,4.6727,0.25613,0.054813
+Female,Red_blood_cell_erythrocyte_distribution_width_30070,13.46,13.6859,1.1631,0.14876,0.127894
+Female,Platelet_count_30080,263.0,268.9624,63.7119,-0.07369,-0.001157
+Female,Lymphocyte_count_30120,2.0,2.0859,0.7499,-0.24466,-0.326259
+Female,Monocyte_count_30130,0.43,0.4606,0.1943,-0.14467,-0.74477
+Female,Neutrophill_count_30140,4.3,4.5345,1.5239,-0.39547,-0.259518
+Female,Age_when_attended_assessment_centre_21003,60.0,58.2292,7.7054,0.34207,0.044393
+Female,(Intercept),,,,-0.57794,-3.673344

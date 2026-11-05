@@ -1,0 +1,11 @@
+Sex,Analysis,n,cases,mean_fold_AUROC,fold_SD,pooled_AUROC,pooled_95CI,AUPRC_pooled
+Male,"LightGBM, 175 predictors",13796,9293,0.819,0.009,0.826,0.819-0.833,0.895
+Male,"LightGBM, diagnosis <5 years",6874,2371,,,0.858,0.848-0.866,0.752
+Male,"LightGBM, diagnosis 5-10 years",9557,5054,,,0.824,0.815-0.833,0.822
+Male,"LightGBM, diagnosis >=10 years",6371,1868,,,0.792,0.780-0.803,0.598
+Male,Five-variable comparator,13796,9293,0.766,0.01,0.766,0.757-0.774,0.854
+Female,"LightGBM, 175 predictors",11874,6520,0.849,0.007,0.855,0.848-0.861,0.861
+Female,"LightGBM, diagnosis <5 years",6793,1439,,,0.879,0.869-0.889,0.665
+Female,"LightGBM, diagnosis 5-10 years",8959,3605,,,0.853,0.845-0.861,0.778
+Female,"LightGBM, diagnosis >=10 years",6830,1476,,,0.834,0.823-0.844,0.556
+Female,Five-variable comparator,11874,6520,0.806,0.008,0.806,0.797-0.813,0.811

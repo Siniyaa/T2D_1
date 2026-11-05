@@ -1,0 +1,5 @@
+Sex,Group,n,"HbA1c missing, n (%)","Glucose missing, n (%)","Either missing, n (%)","Both measured, n (%)"
+Male,Incident cases,9293,610 (6.6),"1,149 (12.4)","1,660 (17.9)","7,633 (82.1)"
+Male,Controls,4503,203 (4.5),511 (11.3),688 (15.3),"3,815 (84.7)"
+Female,Incident cases,6520,440 (6.7),935 (14.3),"1,294 (19.8)","5,226 (80.2)"
+Female,Controls,5354,229 (4.3),709 (13.2),902 (16.8),"4,452 (83.2)"
