@@ -74,13 +74,6 @@ def load_prevalent():
     return df
 
 
-def load_incident_cases(df_prev=None):
-    """Incident cases: British, first E11 after baseline, baseline HbA1c < 48 mmol/mol."""
-    fut = pd.read_csv(os.path.join(DATA, "medical_history_fut.tsv"), sep="\t", low_memory=False)
-    fut = fut[fut["Ethnic background [21000]"] == "British"]
-    return fut[~(pd.to_numeric(fut[HBA], errors="coerce") >= 48)]
-
-
 def family_history(df):
     cols = [c for c in df.columns if "had diabetes" in c]
     return df[cols].apply(lambda s: s.astype(str).str.lower().eq("true")).any(axis=1)

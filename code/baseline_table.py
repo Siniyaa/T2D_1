@@ -2,7 +2,7 @@
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
 import numpy as np, pandas as pd, os
-from common import (load_prevalent, load_incident_cases, family_history, OUT, SEX, AGE_U, HBA)
+from common import (load_prevalent, family_history, OUT, SEX, AGE_U, HBA)
 
 VARS = [(AGE_U, "Age, years"), ("Body mass index (BMI) [21001]", "BMI, kg/m2"),
         ("Waist circumference [48]", "Waist circumference, cm"),
@@ -32,9 +32,8 @@ def describe(df):
 
 def main():
     prev = load_prevalent()
-    groups = {"Prevalent T2D cases": prev[prev.HasT2D],
-              "Controls": prev[~prev.HasT2D],
-              "Incident T2D cases": load_incident_cases()}
+    groups = {"Cases recorded by 2010": prev[prev.HasT2D],
+              "Controls": prev[~prev.HasT2D]}
     desc = {g: describe(d) for g, d in groups.items()}
     miss = {lab: f"{np.mean([pd.to_numeric(d[c], errors='coerce').isna().mean() for d in groups.values()])*100:.1f}"
             for c, lab in VARS}

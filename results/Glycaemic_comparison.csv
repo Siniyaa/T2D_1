@@ -1,7 +1,0 @@
-Sex,Model,n,cases,mean_fold_AUROC,fold_SD,pooled_AUROC,pooled_95CI,Difference vs primary,95% CI (paired)
-Male,"Glycaemic only (HbA1c, glucose)",13796,9293,0.831,0.008,0.831,0.824-0.837,0.005,-0.004 to 0.013
-Male,Primary + HbA1c + glucose,13796,9293,0.886,0.007,0.891,0.885-0.896,0.065,0.059 to 0.070
-Male,"Primary, 175 non-glycaemic predictors",13796,9293,0.819,0.009,0.826,0.819-0.833,0.0,reference
-Female,"Glycaemic only (HbA1c, glucose)",11874,6520,0.835,0.008,0.835,0.828-0.842,-0.019,-0.027 to -0.011
-Female,Primary + HbA1c + glucose,11874,6520,0.896,0.006,0.901,0.895-0.906,0.046,0.042 to 0.050
-Female,"Primary, 175 non-glycaemic predictors",11874,6520,0.849,0.007,0.855,0.848-0.861,0.0,reference

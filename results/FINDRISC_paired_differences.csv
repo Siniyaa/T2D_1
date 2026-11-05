@@ -1,5 +1,0 @@
-Sex,Comparison,Difference in AUROC,95% CI (paired bootstrap)
-Male,LightGBM - adapted FINDRISC,0.096,0.088 to 0.103
-Male,Five-variable comparator - adapted FINDRISC,0.036,0.031 to 0.041
-Female,LightGBM - adapted FINDRISC,0.091,0.084 to 0.098
-Female,Five-variable comparator - adapted FINDRISC,0.042,0.037 to 0.047

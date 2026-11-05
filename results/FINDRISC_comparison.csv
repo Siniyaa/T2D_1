@@ -1,3 +1,0 @@
-Sex,n (cases),"Adapted FINDRISC, AUROC (95% CI)","LightGBM, AUROC (95% CI)","Five-variable comparator, AUROC (95% CI)","FINDRISC computable, %"
-Male,"13,726 (9,233)",0.730 (0.721-0.739),0.826 (0.818-0.834),0.766 (0.757-0.774),99.5
-Female,"11,816 (6,474)",0.764 (0.755-0.773),0.854 (0.848-0.861),0.806 (0.798-0.814),99.5

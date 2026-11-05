@@ -18,17 +18,21 @@ Locked environment for the runs reported here: `requirements-lock.txt`
 (Python 3.11.17, numpy 2.4.6, pandas 2.3.3,
 scikit-learn 1.9.1, lightgbm 4.7.0, scipy 1.17.1,
 statsmodels 0.15.0). Run date 2026-11-04.
-The case-finding runs behind manuscript Table 2 and Supplementary Tables S2-S9 were made earlier
-in an environment that was not recorded and cannot be re-executed exactly; this is stated in
-Methods 2.9. Everything else below was regenerated in the locked environment.
+Every result in the manuscript was regenerated in this locked environment. The earlier
+case-finding runs, whose environment was not recorded, have been superseded by
+`code/case_finding.py` and are no longer reported. The incident-prediction analysis was removed from the submission because the follow-up extract
+carries no participant identifier, so case and control records could not be shown to be distinct
+individuals. Its scripts and outputs (`incident_primary.py`, `findrisc.py`,
+`figure2_and_glycaemic.py`, `figure2_plot.py`, `cohorting_fix.py`, `inc_matched.py` and the
+`Incident_*`, `FINDRISC_*`, `Glycaemic_*` and `C_incident_*` result files) have been deleted from
+the working tree so that this repository reproduces the submitted manuscript and nothing else.
+They remain in the git history at commit 87ca782d if that work is resumed.
 
 ## Order
 
 ```bash
-python code/incident_primary.py        # Incident_primary.csv, Glycaemic_comparison.csv
-python code/figure2_and_glycaemic.py   # Figure2_importance.csv, Glycaemic_missingness.csv,
-                                       # Glycaemic_complete_assay.csv
-python code/findrisc.py                # FINDRISC_comparison.csv, FINDRISC_paired_differences.csv
+python code/case_finding.py            # CaseFinding_performance.csv, CaseFinding_tests.csv,
+                                       # CaseFinding_grs.csv
 python code/calibration_dca.py         # Calibration.csv, DecisionCurve.csv, OperatingPoints.csv
 python code/leakage.py                 # leakage_per_predictor.csv  (500 replicates; prints the
                                        # shared-control counts for the two outcome samples)
